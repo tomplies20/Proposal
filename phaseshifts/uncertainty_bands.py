@@ -243,10 +243,10 @@ def genenerate_wavename(S, L, J):
 #title2 = "NLO_DeltaGO450"
 title2 = "LO_EM500new"
 S =      [1]
-L =      [1]
-Lprime = [1]            #first index respectively 10010 3s1
-J =      [2]
-T =      [1]
+L =      [0]
+Lprime = [0]            #first index respectively 10010 3s1
+J =      [1]
+T =      [0]
 
 #percent_plus_ = [0.01, 0, 0, 0, 0]
 #percent_minus_ = [-0.015, 0, 0, 0, 0]
@@ -321,6 +321,7 @@ N3LO_phaseshifts = np.array([compute_phase_shifts(K_N3LO, i) for i in range(Nrow
 N4LO_phaseshifts = np.array([compute_phase_shifts(K_N4LO, i) for i in range(Nrows)])
 energy = Elab(mesh_points)
 
+print(energy)
 
 LO_phaseshifts = phase_shift_correct(LO_phaseshifts)
 NLO_phaseshifts = phase_shift_correct(NLO_phaseshifts)
