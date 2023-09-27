@@ -596,7 +596,7 @@ def random_sampling(number_points, chiral_order):
     sv00 = './potentials/SVD_files/singular_values/' + "SVD_chiral_order_%s_lambda_%s_SLLJT_%s%s%s%s%s_singular_values" % (
         orders[chiral_order], '2.00', S[0], L[0], Lprime[0], J[0], T[0])
     singular_values = np.loadtxt(sv00)[:5]
-    file_name = "phaseshifts_SLLJT_%s%s%s%s%s_lambda_2.00_s%s_4.dat" % (S[0], L[0], Lprime[0], J[0], T[0], SVD_rank + 1)
+    file_name = "phaseshifts_SLLJT_%s%s%s%s%s_lambda_2.00_s%s_5.dat" % (S[0], L[0], Lprime[0], J[0], T[0], SVD_rank + 1)
     f = open('./random_sampling/' + file_name, 'w')
     for i in range(number_points):
         print(i)
@@ -613,4 +613,4 @@ def random_sampling(number_points, chiral_order):
         f.write('\n')
 
 
-random_sampling(2000, 3)
+random_sampling(1000, 3)
