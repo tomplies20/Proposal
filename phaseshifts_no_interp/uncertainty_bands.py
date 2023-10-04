@@ -242,10 +242,10 @@ def genenerate_wavename(S, L, J):
 # read in particular uncoupled or coupled matrix elements
 #title2 = "NLO_DeltaGO450"
 title2 = "LO_EM500new"
-S =      [0]
-L =      [0]
-Lprime = [0]            #first index respectively 10010 3s1
-J =      [0]
+S =      [1]
+L =      [1]
+Lprime = [1]            #first index respectively 10010 3s1
+J =      [2]
 T =      [1]
 
 #percent_plus_ = [0.01, 0, 0, 0, 0]

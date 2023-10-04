@@ -244,10 +244,10 @@ def genenerate_wavename(S, L, J):
 #title2 = "NLO_DeltaGO450"
 title2 = "LO_EM500new"
 S =      [1]
-L =      [0]
-Lprime = [0]            #first index respectively 10010 3s1
-J =      [1]
-T =      [0]
+L =      [1]
+Lprime = [1]            #first index respectively 10010 3s1
+J =      [0]
+T =      [1]
 SVD_rank = 4 #+1 ##replace all (literal) percent arrays by np.zeros([SVD_rank+1])
 #percent_plus_ = [0.01, 0, 0, 0, 0]
 #percent_minus_ = [-0.015, 0, 0, 0, 0]
@@ -596,11 +596,11 @@ def random_sampling(number_points, chiral_order):
     sv00 = './potentials/SVD_files/singular_values/' + "SVD_chiral_order_%s_lambda_%s_SLLJT_%s%s%s%s%s_singular_values" % (
         orders[chiral_order], '2.00', S[0], L[0], Lprime[0], J[0], T[0])
     singular_values = np.loadtxt(sv00)[:5]
-    file_name = "phaseshifts_SLLJT_%s%s%s%s%s_lambda_2.00_s%s_5.dat" % (S[0], L[0], Lprime[0], J[0], T[0], SVD_rank + 1)
+    file_name = "phaseshifts_SLLJT_%s%s%s%s%s_lambda_2.00_s%s_new_2.dat" % (S[0], L[0], Lprime[0], J[0], T[0], SVD_rank + 1)
     f = open('./random_sampling/' + file_name, 'w')
     for i in range(number_points):
         print(i)
-        percent= [random.uniform(-0.0, 0.0), random.uniform(-1, 1), random.uniform(-1, 1), random.uniform(-1, 1), random.uniform(-1, 1)]
+        percent= [random.uniform(-0.0, 0.0), random.uniform(-1, 1), random.uniform(-0, 0), random.uniform(-1, 1), random.uniform(-1.5, 1.5)]
         phaseshifts, x_, y_, ratio = variation_plus(3, SVD_rank, "2.00", percent)
         ratio_array = np.array([ratio])
         print(percent)
@@ -613,4 +613,4 @@ def random_sampling(number_points, chiral_order):
         f.write('\n')
 
 
-random_sampling(1000, 3)
+random_sampling(15000, 3)
