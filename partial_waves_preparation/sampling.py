@@ -48,13 +48,12 @@ files = os.listdir(loc)
 
 
 partial_waves = ['00001', '01110', '10010', '11101', '11111', '11121']
-number_samples = 100
-LECs_00001 = np.zeros((number_samples, 5))
-LECs_10010 = np.zeros((number_samples, 5))
-LECs_01110 = np.zeros((number_samples, 5))
-LECs_11101 = np.zeros((number_samples, 5))
-LECs_11111 = np.zeros((number_samples, 5))
-LECs_11121 = np.zeros((number_samples, 5))
+
+##determines how many samples you are going to pick from the ratio filtered LEC sets
+## caution: initial amount of LEC sets is 15000 / 30000 but after ratio filtering
+## can be significantly lower:
+## chose number_samples lower than that amount
+#number_samples = 100
 
 #LECs = np.zeros((number_samples, 5*len(partial_waves)*len(interactions)))
 
@@ -67,8 +66,8 @@ grid_size = 200
 
 loc_samples = '/Users/pleazy/PycharmProjects/Proposal/phaseshifts_no_interp/LECs/samples_after_filter/'
 
-def sampling_one_partial_wave(number_samples, partial_wave):
-    filename = "phaseshifts_SLLJT_%s_lambda_2.00_s%s_filter.dat" % (partial_wave, SVD_rank + 1)
+def sampling_one_partial_wave(number_samples, partial_wave, particles):
+    filename = "phaseshifts_SLLJT_%s_lambda_2.00_%s_s%s_filter.dat" % (partial_wave, particles, SVD_rank + 1)
     data_ = np.loadtxt(loc_samples + filename)
     LECs = data_[:, 0:5]
     phaseshifts = data_[:, 5:]
@@ -89,8 +88,8 @@ def sampling_one_partial_wave(number_samples, partial_wave):
             potential_sum += V00_new
         potential_sum
         ###write out potential
-        filename_final = 'VNN_N3LO_Plies_SLLJT_%s_lambda_2.00_Np_100_np_nocut_%s.dat' % (partial_wave, i)
-        g = open('./potentials/' + filename_final, 'w')
+        filename_final = 'VNN_N3LO_Plies%s_SLLJT_%s_lambda_2.00_Np_100_%s_nocut.dat' % (i, partial_wave, particles)
+        g = open('./potentials_after_sampling_partial_waves/' + filename_final, 'w')
         for m in range(100):
             g.write(str(mesh_weights[m]) + " " + str(mesh_points[m]) + "\n")
 
@@ -114,7 +113,7 @@ def sampling_one_partial_wave(number_samples, partial_wave):
 
     return
 
-sampling_one_partial_wave(100, '00001')
+sampling_one_partial_wave(50, '00001', 'np')
 
 
 

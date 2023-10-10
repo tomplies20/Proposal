@@ -2,7 +2,14 @@ import numpy as np
 import scipy as sc
 import matplotlib.pyplot as plt
 
-
+dictionary_titles = {
+    "00001": r'$^1$S$_0$',
+    "10010": r'$^3$S$_1$',
+    "01110": r'$^1$P$_1$',
+    "11101": r'$^3$P$_0$',
+    "11111": r'$^3$P$_1$',
+    "11121": r'$^3$P$_2$'
+}
 
 energy_ = np.array([7.46471504e-02, 6.71824354e-01, 1.86617876e+00, 3.65771037e+00,
                     6.04641918e+00, 9.03230520e+00, 1.26153684e+01, 1.67956088e+01,
@@ -54,7 +61,7 @@ def sample_filter(partial_wave, ratio):
     error_interpolate = sc.interpolate.interp1d(energy_, N3LO_error)
     error_interpolated = error_interpolate(energy_lin)
 
-    reference_path = '/Users/pleazy/PycharmProjects/Proposal/phaseshifts_no_interp/phaseshift_files/phaseshifts_unchanged/phaseshifts_unchanged_SLLJT_%s_lambda_2.00_s5.dat' % (partial_wave)
+    reference_path = '/Users/pleazy/PycharmProjects/Proposal/phaseshifts_no_interp/phaseshift_files/phaseshifts_SVD/phaseshifts_unchanged_SLLJT_%s_lambda_2.00_s5.dat' % (partial_wave)
     reference_data = np.loadtxt(reference_path)
     reference = reference_data[:, 3]
     reference_interpolate = sc.interpolate.interp1d(energy_, reference)
@@ -116,7 +123,7 @@ def sample_filter(partial_wave, ratio):
     #    phaseshifts_filter[i] = phase
     ### write phaseshifts and LECs into a file here
     ### use indices to get original noninterpolated phaseshifts here
-    file_name = "phaseshifts_SLLJT_%s_lambda_2.00_s%s_filter.dat" % (partial_wave, SVD_rank + 1)
+    file_name = "phaseshifts_SLLJT_%s_lambda_2.00_np_s%s_filter.dat" % (partial_wave, SVD_rank + 1)
     f = open('./samples_after_filter/' + file_name, 'w')
     #for k in range(len(indices)):
     print(np.shape(LEC_set_ratio))
@@ -138,6 +145,8 @@ def sample_filter(partial_wave, ratio):
              color='orange', alpha=0.6)
     plt.ylim(0.8, 1.2)
     plt.xlim(0, 200)
+    plt.title(dictionary_titles[partial_wave])
+    plt.savefig('./plots_phaseshift_samples/' + partial_wave + '_68percent.pdf')
     plt.show()
     return phaseshift_set_ratio
 

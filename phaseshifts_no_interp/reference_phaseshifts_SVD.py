@@ -13,7 +13,6 @@ from numpy import loadtxt, sqrt, zeros, array, exp
 from numpy import linalg
 import scipy as sc
 from scipy.integrate import odeint
-import random
 
 # physical constants
 hbarc = 197.326
@@ -248,7 +247,12 @@ L =      [1]
 Lprime = [1]            #first index respectively 10010 3s1
 J =      [0]
 T =      [1]
+
+
 SVD_rank = 4 #+1 ##replace all (literal) percent arrays by np.zeros([SVD_rank+1])
+
+
+
 #percent_plus_ = [0.01, 0, 0, 0, 0]
 #percent_minus_ = [-0.015, 0, 0, 0, 0]
 
@@ -261,14 +265,14 @@ partial_wave = str(S[0]) + str(L[0]) + str(Lprime[0]) + str(J[0]) + str(T[0])
 Nrows = 100
 colors = ['r', 'navy', 'orange', 'teal', 'forestgreen']
 
-'''
+
 begin = 0
 end = 6
 new_mesh_size = 100
 step_width = (end- begin) / new_mesh_size
 x_fine = np.linspace(begin + step_width/2, end - step_width/2, new_mesh_size)
 y_fine = np.linspace(begin + step_width/2, end - step_width/2, new_mesh_size)
-'''
+
 title3 = 'LO_fit'
 
 
@@ -281,11 +285,10 @@ pot_3s1 = 'LO_EM500new'
 
 
 [V_LO, Vmat_1, Tkin_1, mesh_points, mesh_weights] = read_Vchiral_og('LO_EM500new', S[0], L[0], Lprime[0], J[0], T[0], Nrows)
-#[V_NLO, Vmat_1, Tkin_1, mesh_points, mesh_weights] = read_Vchiral_og('NLO_EM500new', S[0], L[0], Lprime[0], J[0], T[0], Nrows)
-#[V_N2LO, Vmat_1, Tkin_1, mesh_points, mesh_weights] = read_Vchiral_og('N2LO_EM500new', S[0], L[0], Lprime[0], J[0], T[0], Nrows)
-#[V_N3LO, Vmat_1, Tkin_1, mesh_points, mesh_weights] = read_Vchiral_og('N3LO_EM500new', S[0], L[0], Lprime[0], J[0], T[0], Nrows)
-#[V_N4LO, Vmat_1, Tkin_1, mesh_points, mesh_weights] = read_Vchiral_og('N4LO_EM500new', S[0], L[0], Lprime[0], J[0], T[0], Nrows)
-
+[V_NLO, Vmat_1, Tkin_1, mesh_points, mesh_weights] = read_Vchiral_og('NLO_EM500new', S[0], L[0], Lprime[0], J[0], T[0], Nrows)
+[V_N2LO, Vmat_1, Tkin_1, mesh_points, mesh_weights] = read_Vchiral_og('N2LO_EM500new', S[0], L[0], Lprime[0], J[0], T[0], Nrows)
+[V_N3LO, Vmat_1, Tkin_1, mesh_points, mesh_weights] = read_Vchiral_og('N3LO_EM500new', S[0], L[0], Lprime[0], J[0], T[0], Nrows)
+[V_N4LO, Vmat_1, Tkin_1, mesh_points, mesh_weights] = read_Vchiral_og('N4LO_EM500new', S[0], L[0], Lprime[0], J[0], T[0], Nrows)
 
 
 
@@ -309,7 +312,7 @@ def phase_shift_correct(phase_shifts):
     #return phase_shifts
 
 
-'''
+
 K_LO = compute_K_matrix(V_LO, Nrows, 6)
 K_NLO = compute_K_matrix(V_NLO, Nrows, 6)
 K_N2LO = compute_K_matrix(V_N2LO, Nrows, 6)
@@ -320,20 +323,10 @@ NLO_phaseshifts = np.array([compute_phase_shifts(K_NLO, i) for i in range(Nrows)
 N2LO_phaseshifts = np.array([compute_phase_shifts(K_N2LO, i) for i in range(Nrows)])
 N3LO_phaseshifts = np.array([compute_phase_shifts(K_N3LO, i) for i in range(Nrows)])
 N4LO_phaseshifts = np.array([compute_phase_shifts(K_N4LO, i) for i in range(Nrows)])
-'''
 energy = Elab(mesh_points)
 
+print(energy)
 
-file_name_ps = "phaseshifts_unchanged_SLLJT_%s%s%s%s%s_lambda_2.00_s%s.dat" % (S[0], L[0], Lprime[0], J[0], T[0], SVD_rank + 1)
-file_name_errors = "phaseshifts_uncertainties_SLLJT_%s%s%s%s%s_lambda_2.00_s%s.dat" % (S[0], L[0], Lprime[0], J[0], T[0], SVD_rank + 1)
-ps = np.loadtxt('./phaseshift_files/phaseshifts_unchanged/' + file_name_ps)
-LO_phaseshifts = ps[:,0]
-NLO_phaseshifts = ps[:,1]
-N2LO_phaseshifts = ps[:,2]
-N3LO_phaseshifts = ps[:,3]
-N4LO_phaseshifts = ps[:,4]
-
-##
 LO_phaseshifts = phase_shift_correct(LO_phaseshifts)
 NLO_phaseshifts = phase_shift_correct(NLO_phaseshifts)
 N2LO_phaseshifts = phase_shift_correct(N2LO_phaseshifts)
@@ -341,17 +334,9 @@ N3LO_phaseshifts = phase_shift_correct(N3LO_phaseshifts)
 N4LO_phaseshifts = phase_shift_correct(N4LO_phaseshifts)
 
 
-errors = np.loadtxt('./phaseshift_files/EKM_uncertainty/' + file_name_errors)
-error_LO_x = errors[:,0]
-error_NLO_x = errors[:,1]
-error_N2LO_x = errors[:,2]
-error_N3LO_x = errors[:,3]
-error_N4LO_x = errors[:,4]
 
 
-phaseshifts_order = [LO_phaseshifts, NLO_phaseshifts, N2LO_phaseshifts, N3LO_phaseshifts, N4LO_phaseshifts]
 
-errors_order = [error_LO_x, error_NLO_x, error_N2LO_x, error_N3LO_x, error_N3LO_x]
 
 energy = Elab(mesh_points)
 
@@ -403,6 +388,47 @@ def SVD_potential(chiral_order, SVD_order, lamb, percent):
     return potential_sum
 
 
+'''
+def potential_variation(chiral_order, SVD_order, lamb, percent, sign, x):
+    potential_sum = 0
+    sv00 = './potentials/SVD_files/singular_values/' + "SVD_chiral_order_%s_lambda_%s_SLLJT_%s%s%s%s%s_singular_values" % (
+        orders[chiral_order], lamb, S[0], L[0], Lprime[0], J[0], T[0])
+    singular_values = np.loadtxt(sv00)
+    for o in range(SVD_order + 1):
+        sv = singular_values[o]
+        # if o in SVD_variation_index:
+
+        sv = sv + sv * percent[o]
+        print(sign)
+        print(percent)
+        V00_new = 0
+        file00 = './potentials/SVD_files/operators/' + "SVD_chiral_order_%s_lambda_%s_SLLJT_%s%s%s%s%s_SVD_order_%s" % (
+        orders[chiral_order], lamb, S[0], L[0], Lprime[0], J[0], T[0], o + 1)
+
+        [V00, Vmat_1, Tkin_1, mesh_points, mesh_weights] = read_Vchiral(file00, Nrows)
+        V00_new = np.copy(V00) * sv
+        potential_sum += V00_new
+
+
+
+
+
+
+    file_name = 'VNN_%s_Plies_SVD_s%s_SLLJT_%s%s%s%s%s_lambda_%s_Np_100_np_nocut_%s.dat' % (orders[chiral_order], x+1,  S[0], L[0], Lprime[0], J[0], T[0], lamb, sign)
+
+    f = open('/Users/pleazy/PycharmProjects/pythonProject/SVD/SVD_variation_potentials/' + file_name, 'w')
+    for m in range(100):
+        f.write(str(mesh_weights[m]) + " " + str(mesh_points[m]) + "\n")
+
+    for i in range(100):
+        for j in range(100):
+            f.write(str(mesh_points[i]) + " " + str(mesh_points[j]) + " " + str(potential_sum[i][j]) + "\n")
+
+    f.close()
+
+
+    return
+'''
 
 
 
@@ -417,9 +443,77 @@ M = (938.272 + 939.565) / 2.0
 
 pion_momentum = 139.57039 / hbarc * np.ones([len(energy)])
 
+Q = np.empty([len(energy)])
+for k in range(len(energy)):
+    Q[k] = np.sqrt(M * energy[k] / ( 2 * hbarc * hbarc))
+
+lambda_b = 600
+Q = np.maximum.reduce([Q, pion_momentum]) / (lambda_b / hbarc)
 
 
-reference = N3LO_phaseshifts
+
+diff_LO = np.abs(LO_phaseshifts)
+diff_NLO = np.abs(NLO_phaseshifts - LO_phaseshifts)
+diff_N2LO = np.abs(N2LO_phaseshifts - NLO_phaseshifts)
+diff_N3LO = np.abs(N3LO_phaseshifts - N2LO_phaseshifts)
+diff_N4LO = np.abs(N4LO_phaseshifts - N3LO_phaseshifts)
+
+
+def max_LO():
+    return Q * np.abs(LO_phaseshifts)
+
+
+def max_NLO():
+    return np.maximum.reduce([Q ** 3 * diff_LO, Q ** 1 * diff_NLO])
+
+
+def max_N2LO():
+    return np.maximum.reduce([Q ** 4 * diff_LO, Q ** 2 * diff_NLO, Q ** 1 * diff_N2LO])
+
+
+def max_N3LO():
+    return np.maximum.reduce([Q ** 5 * diff_LO, Q ** 3 * diff_NLO, Q ** 2 * diff_N2LO, Q * diff_N3LO])
+
+
+def max_N4LO():
+    return np.maximum.reduce(
+        [Q ** 6 * diff_LO, Q ** 4 * diff_NLO, Q ** 3 * diff_N2LO, Q ** 2 * diff_N3LO, Q * diff_N4LO])
+
+
+# print(c_max_to_order(5))
+
+error_LO_x = max_LO()
+error_NLO_x = max_NLO()
+error_N2LO_x = max_N2LO()
+error_N3LO_x = max_N3LO()
+error_N4LO_x = max_N4LO()
+
+
+#phaseshifts_order = [LO_phaseshifts, NLO_phaseshifts, N2LO_phaseshifts, N3LO_phaseshifts, N4LO_phaseshifts]
+
+
+ps_LO = SVD(0, SVD_rank, '2.00', percent = np.zeros((SVD_rank+1)))
+ps_NLO = SVD(1, SVD_rank, '2.00', percent = np.zeros((SVD_rank+1)))
+ps_N2LO = SVD(2, SVD_rank, '2.00', percent = np.zeros((SVD_rank+1)))
+ps_N3LO = SVD(3, SVD_rank, '2.00', percent = np.zeros((SVD_rank+1)))
+ps_N4LO = SVD(4, SVD_rank, '2.00', percent = np.zeros((SVD_rank+1)))
+
+
+phaseshifts_order = [ps_LO, ps_NLO, ps_N2LO, ps_N3LO, ps_N4LO]
+
+reference = ps_N3LO
+
+errors_order = [error_LO_x, error_NLO_x, error_N2LO_x, error_N3LO_x, error_N3LO_x]
+
+'''
+for b in range(len(energy)):
+    for error in errors_order:
+        if np.abs(error[b]) < 0.5:
+            error[b] = 0.5
+'''
+
+
+#reference = N3LO_phaseshifts
 
 
 
@@ -429,24 +523,19 @@ alp = 0.2
 
 
 
-
-
-
+'''
 def variation_plus(chiral_order, SVD_order, lamb, percent):
 
     SVD_plus_x = SVD(chiral_order, SVD_order, lamb, percent)
     SVD_x = SVD(chiral_order, SVD_order, lamb, [0, 0, 0, 0, 0])
     reference_x = phaseshifts_order[chiral_order]
-    #xx = np.linspace(energy[0], 200 + energy[0], grid_size ) #previously len(energy) + 1
-    xx = np.linspace((energy[0]/200)**(1/3), 1, 200)**3 * 200
-    #print(xx)
+    xx = np.linspace(energy[0], 200 + energy[0], grid_size ) #previously len(energy) + 1
     energy_inter = xx
 
-    '''
     f_plus = sc.interpolate.interp1d(energy, SVD_plus_x)
     plus_inter = f_plus(xx)
     SVD_plus = f_plus(xx)
-    print(np.shape(SVD_plus))
+
 
 
     f_ = sc.interpolate.interp1d(energy, SVD_x)
@@ -491,78 +580,13 @@ def variation_plus(chiral_order, SVD_order, lamb, percent):
         ratios[l] = ratio
         l+=1
     print('energy limit: ' + str(max_energy) + 'MeV' + ' ratio: ' + str(ratio))
-    '''
-    ratio = 0
-    SVD_plus = SVD_plus_x
-    reference = reference_x
-    error_ = errors_order[chiral_order]
-
-
-    return SVD_plus, reference, error_, ratio
 
 
 
+    return SVD_plus, reference, error_
 
 
-def variation2(chiral_order, SVD_order, lamb, percent_plus, percent_minus, sv_index, ps_plus, ps_minus):
-
-    SVD_plus_x = SVD(chiral_order, SVD_order, lamb, percent_plus)
-    SVD_x = SVD(chiral_order, SVD_order, lamb, [0, 0, 0, 0, 0])
-    SVD_minus_x = SVD(chiral_order, SVD_order, lamb,  -1 * percent_minus)
-    reference_x = phaseshifts_order[chiral_order]
-    #xx = np.linspace(energy[0], 200 + energy[0], grid_size) #previously len(energy) + 1
-    xx = np.linspace((energy[0] / 200) ** (1 / 3), 1, 200) ** 3 * 200
-    energy_inter = xx
-
-
-    f_plus = sc.interpolate.interp1d(energy, SVD_plus_x)
-
-    SVD_plus = f_plus(xx)
-
-    f_ = sc.interpolate.interp1d(energy, SVD_x)
-    _inter = f_(xx)
-    SVD_ = f_(xx)
-
-    f_minus = sc.interpolate.interp1d(energy, SVD_minus_x)
-
-    SVD_minus = f_minus(xx)
-
-    f_ref = sc.interpolate.interp1d(energy, reference_x)
-
-    reference = f_ref(xx)
-
-    f_err = sc.interpolate.interp1d(energy, errors_order[chiral_order])
-
-    error_ = f_err(xx)
-
-    plt.figure(figsize=(10, 10))
-
-    plt.fill_between(energy_inter, (reference + error_)/reference, (reference - error_)/reference, color='purple', alpha=alp,
-                     label=orders[chiral_order]+' error')
-    #plt.plot(energy_inter, SVD_, label='s' + str(sv_index + 1) + ' + ' + "0%")
-    color_arr = ['blue', 'purple', 'red', 'orange', 'yellow']
-    for n in range(len(ps_plus)):
-
-        plt.plot(energy_inter, ps_plus[n,:]/reference, label='s' + str(n + 1) , color=color_arr[n], linewidth=0.5)  # 1 = NLO
-
-        plt.plot(energy_inter, ps_minus[n,:]/reference, label='s' + str(n + 1), color=color_arr[n], linewidth=0.5, linestyle='dashed')
-    plt.ylim(0.9, 1.1)
-    plt.plot(energy_inter, reference/reference, label=orders[chiral_order], color='black', linestyle='dashed', linewidth=1)
-
-    #plt.vlines(max_energy, -25, 5, color='grey')
-
-    plt.xlabel('E (MeV)')
-    plt.ylabel(r'$\delta$ (°) ')
-
-    plt.xlim([0, 200])
-    # plt.xlim([0, 20])
-    #plt.ylim([-25,5])
-    # plt.ylim([-3, 0])
-    plt.legend()
-    #plt.ylim(-25, -10)
-    plt.title(orders[chiral_order] + " SVD phaseshifts " + partial_wave + " singular value s" + str(sv_index + 1))
-    plt.savefig("./phaseshift_plots_all_singular_values/" + orders[chiral_order] + "_" + partial_wave +"_SVD_phaseshifts_sv_" +'phaseshifts'+ ".pdf")
-    plt.show()
+'''
 
 
 
@@ -580,37 +604,20 @@ step_size = 0.001
 
 
 
-#perc_steps = np.array([0.0025, 0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 0.75, 1])
+file_name = "phaseshifts_unchanged_SLLJT_%s%s%s%s%s_lambda_2.00_s%s.dat" % (S[0], L[0], Lprime[0], J[0], T[0], SVD_rank + 1)
+f = open('./phaseshift_files/phaseshifts_SVD/' + file_name, 'w')
 
-perc_steps = np.array([0.05, 0.1, 0.25, 0.5, 0.75, 1, -0.05, -0.1, -0.25, -0.5, -0.75, -1])
-
-phaseshifts_ = np.zeros([SVD_rank + 1, 1, grid_size])
-#perc_steps = np.array([0.5])
-#percent_plus = np.zeros([5])
-#1S0
-
-percent_minus = [0, 2.05, -0.04, 0, -0.3]
-
-
-def random_sampling(number_points, chiral_order):
-    sv00 = './potentials/SVD_files/singular_values/' + "SVD_chiral_order_%s_lambda_%s_SLLJT_%s%s%s%s%s_singular_values" % (
-        orders[chiral_order], '2.00', S[0], L[0], Lprime[0], J[0], T[0])
-    singular_values = np.loadtxt(sv00)[:5]
-    file_name = "phaseshifts_SLLJT_%s%s%s%s%s_lambda_2.00_s%s_new_5.dat" % (S[0], L[0], Lprime[0], J[0], T[0], SVD_rank + 1)
-    f = open('./random_sampling/' + file_name, 'w')
-    for i in range(number_points):
-        print(i)
-        percent= [random.uniform(-1, 1), random.uniform(-0, 0.0), random.uniform(-2, 2), random.uniform(-0.2, 0.2), random.uniform(-0, 0)]
-        phaseshifts, x_, y_, ratio = variation_plus(3, SVD_rank, "2.00", percent)
-        ratio_array = np.array([ratio])
-        print(percent)
-        print(ratio)
-        new_singular_values = singular_values + singular_values * percent
-        results = np.concatenate((ratio_array, phaseshifts))
-        results = np.concatenate((new_singular_values, results))
-        for m in results:
-            f.write(str(m) + ' ')
-        f.write('\n')
-
-
-random_sampling(5000, 3)
+for m in range(grid_size):
+        for o in range(5):
+            f.write(str(phaseshifts_order[o][m]) + ' ')
+        f.write("\n")
+'''
+file_name = "phaseshifts_uncertainties_SLLJT_%s%s%s%s%s_lambda_2.00_s%s.dat" % (
+S[0], L[0], Lprime[0], J[0], T[0], SVD_rank + 1)
+f = open('./phaseshift_files/EKM_uncertainty/' + file_name, 'w')
+#str(errors_order[chiral_order][m])
+for m in range(grid_size):
+        for o in range(5):
+            f.write(str(errors_order[o][m]) + ' ')
+        f.write("\n")
+'''
