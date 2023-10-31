@@ -65,7 +65,7 @@ f.close()
 '''
 
 #range eigentlich 65!!!!
-for x in range(50):
+for x in range(240):
     #for dir in os.listdir("/Users/pleazy/PycharmProjects/pythonProject/kai_files/data"):
     #    for filename in dir:
     #        print(dir)

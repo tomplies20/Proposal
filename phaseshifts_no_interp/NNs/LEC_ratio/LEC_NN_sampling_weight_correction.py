@@ -161,16 +161,17 @@ weight_limit = 0
 phaseshift_set_ = np.zeros((new_points, grid_size))
 LEC_set = np.zeros((new_points, 5))
 
-
+old_data = np.loadtxt('/Users/pleazy/PycharmProjects/Proposal/phaseshifts_no_interp/NNs/LEC_ratio/LEC_files/phaseshifts_SLLJT_10010_lambda_2.00_s5_new_2.dat')
+old_weights = old_data[:, 205]
+old_LECs = old_data[:, 0:5]
 
 for i in range(new_points):
     sv_path = f'/Users/pleazy/PycharmProjects/Proposal/phaseshifts_no_interp/potentials/SVD_files/singular_values/SVD_chiral_order_N3LO_lambda_2.00_SLLJT_{partial_wave}_singular_values'
     svs = np.loadtxt(sv_path)[0:5]
     #percentages = np.array([random.uniform(-0.0, 0.0), random.uniform(-0.0, 0.0), random.uniform(-0.25, 0.25), random.uniform(-1, 1), random.uniform(-1, 1)]) #11111 parameter space
-    percentages = np.array([random.uniform(-0.04, 0.04), random.uniform(-0.5, 0.5), random.uniform(-2, 2), random.uniform(-2, 2), random.uniform(-2, 2)])
-    #prev 0.02, 0.2, 0.25, 1, 1
+    percentages = np.array([random.uniform(-0.02, 0.02), random.uniform(-0.2, 0.2), random.uniform(-0.25, 0.25), random.uniform(-1, 1), random.uniform(-1, 1)])
     #percentages = [0, 0, 0, 0, 0] #best possible total weight is 0.5
-    random_LECs = svs + svs*percentages
+    random_LECs = old_LECs[i]
     dataset_ = np.zeros((grid_size, 6))
     for h in range(grid_size):
         dataset_[h] = [random_LECs[0], random_LECs[1], random_LECs[2], random_LECs[3], random_LECs[4], energy[h]]
@@ -220,6 +221,12 @@ reference_interpolate = sc.interpolate.interp1d(energy_, reference)
 reference_interpolated = reference_interpolate(energy_lin)
 
 
+
+
+def covariance(x, xprime, c,L ):
+    return c**2 * np.exp(- 1/2 * (x - xprime).T * 1/L * (x - xprime))
+covariance()
+
 def ratio_test(weight_limit, phaseshift_set_):
       # default 0.68
 
@@ -228,7 +235,7 @@ def ratio_test(weight_limit, phaseshift_set_):
     LEC_set_ratio = np.zeros((new_points, 5))
 
     ##weights low energy phase shifts higher than high energy ones
-    lin_space = np.linspace(1, 1, grid_size) #change back to (1,0, grid_size)
+    lin_space = np.linspace(1, 0, grid_size) #change back to (1,0, grid_size)
 
     # use this one for the NN phaseshifts
     phaseshift_set = np.zeros((new_points, grid_size))
@@ -240,12 +247,12 @@ def ratio_test(weight_limit, phaseshift_set_):
 
         weight = 0
         count = 0
-        for n in range(grid_size):
+        for n in range(18, 19):
             #gauss = gaussian(phaseshift_set[m, n], reference_interpolated[n], np.abs(error_interpolated[n]))
             mu = reference_interpolated[n]
             sigma = np.abs(error_interpolated[n])
             distance = np.abs(phaseshift_set[m, n] - reference_interpolated[n])
-            result, error = quad(gaussian, reference_interpolated[n] + distance, reference_interpolated[n] + distance+5*sigma, args=(mu, sigma))
+            result, error = quad(gaussian, reference_interpolated[n] + distance, reference_interpolated[n] + distance+10*sigma, args=(mu, sigma))
             gauss = result
             weight += gauss * lin_space[n]
             #print(gauss)
@@ -322,17 +329,18 @@ for j in range(num_samples):
 
 LEC_set_final, phaseshift_set_final_interpolated, weights_ = ratio_test(weight_limit, phaseshift_set_final_non_uniform_interpolation)
 
-file_name = f"phaseshifts_SLLJT_{partial_wave}_lambda_2.00_s{SVD_rank + 1}_new_3.dat"
+file_name = f"new_weights_2.dat"
 f = open('./LEC_files/' + file_name, 'w')
 
 for i in range(len(weights_)):
     weights = np.atleast_1d(weights_)
 
     #results = np.column_stack((np.array(weight), phaseshift_set_final_interpolated[i,:]))
-    results = np.concatenate((LEC_set_final[i], phaseshift_set_final_interpolated[i,:]))
-    results = np.concatenate((results, [weights[i]]))
-    for m in results:
-        f.write(str(m) + ' ')
+    #results = np.concatenate((LEC_set_final[i], phaseshift_set_final_interpolated[i,:]))
+    #results = np.concatenate((results, [weights[i]]))
+    results = weights[i]
+
+    f.write(str(results) + ' ')
     f.write('\n')
 
 for phaseshifts_ in phaseshift_set_final_interpolated:
@@ -366,7 +374,7 @@ for i in range(5):
             #axes[i, j].set_title(f'Plot {i+1}-{j+1}')
         else:
             axes[i, j].axis('off')
-plt.savefig('LEC_correlations_10010_68_weights_2.pdf')
+plt.savefig('LEC_correlations_10010_68_weights.pdf')
 plt.show()
 
 

@@ -66,25 +66,33 @@ grid_size = 200
 
 loc_samples = '/Users/pleazy/PycharmProjects/Proposal/phaseshifts_no_interp/LECs/samples_after_filter/'
 
+
+
 def sampling_one_partial_wave(number_samples, partial_wave, particles):
     filename = "phaseshifts_SLLJT_%s_lambda_2.00_%s_s%s_filter.dat" % (partial_wave, particles, SVD_rank + 1)
     data_ = np.loadtxt(loc_samples + filename)
     LECs = data_[:, 0:5]
-    phaseshifts = data_[:, 5:]
+    phaseshifts = data_[:, 5:205]
     final_LECs = np.zeros((number_samples, SVD_rank + 1))
     final_phaseshifts = np.zeros((number_samples, grid_size))
+
+    random_numbers = random.sample(range(240), 240)
+    #print(random_numbers)
+
     for i in range(number_samples):
         potential_sum = 0
-        random_index = random.randint(0, len(LECs[:, 0]))
-        final_phaseshifts[i] = phaseshifts[random_index]
-        final_LECs[i] = LECs[random_index]
+        #print(len(LECs[:,0]))
+        #k = random_numbers[i]
+        k = i
+        final_phaseshifts[i] = phaseshifts[k]
+        final_LECs[i] = LECs[k]
 
         for o in range(SVD_order):
 
             operators_path = '/Users/pleazy/PycharmProjects/Proposal/phaseshifts_no_interp/potentials/SVD_files/operators/' + "SVD_chiral_order_N3LO_lambda_2.00_SLLJT_%s_SVD_order_%s" % (partial_wave, o+1)
 
             [V00, Vmat_1, Tkin_1, mesh_points, mesh_weights] = read_Vchiral(operators_path , 100)
-            V00_new = np.copy(V00) * LECs[random_index,o]
+            V00_new = np.copy(V00) * LECs[k,o]
             potential_sum += V00_new
         potential_sum
         ###write out potential
@@ -113,7 +121,7 @@ def sampling_one_partial_wave(number_samples, partial_wave, particles):
 
     return
 
-sampling_one_partial_wave(50, '00001', 'np')
+sampling_one_partial_wave(240, '10010', 'np')
 
 
 

@@ -3,7 +3,9 @@ import os
 import shutil
 
 loc = '/Users/pleazy/PycharmProjects/Proposal/partial_waves_preparation/potentials_after_sampling_partial_waves/'
-final_loc = './packages/'
+#loc = '/Users/pleazy/PycharmProjects/Proposal/partial_waves_preparation/samples_100_3s1/'
+#final_loc = './packages/'
+final_loc = '/Users/pleazy/Documents/Uni/Proposal/Pycharm/Proposal_project/'
 
 files = os.listdir(loc)
 
