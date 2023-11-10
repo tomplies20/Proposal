@@ -6,7 +6,7 @@ loc = '/Users/pleazy/PycharmProjects/Proposal/partial_waves_preparation/potentia
 #loc = '/Users/pleazy/PycharmProjects/Proposal/partial_waves_preparation/samples_100_3s1/'
 #final_loc = './packages/'
 final_loc = '/Users/pleazy/Documents/Uni/Proposal/Pycharm/Proposal_project/'
-
+final_loc = '/Users/pleazy/Documents/Uni/Proposal/Files/package_500'
 files = os.listdir(loc)
 
 #file.split('_')

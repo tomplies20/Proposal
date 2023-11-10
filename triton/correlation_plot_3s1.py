@@ -62,7 +62,7 @@ def triton(row):
 
     #weights = np.ones((len(triton_data)))
     weights_ = weights**1
-    hist, bin_edges = np.histogram(triton_data, bins=14, weights=weights_)
+    hist, bin_edges = np.histogram(triton_data, bins=20, weights=weights_)
     # Plot the weighted histogram
     plt.hist(triton_data, bins=bin_edges, weights=weights_, edgecolor='black', alpha=0.7)
 
@@ -111,15 +111,15 @@ def triton(row):
     # Show the plot
 
     bin_centers = (bin_edges[1:] + bin_edges[:-1]) / 2
-    params, _ = curve_fit(gaussian, bin_centers, hist, p0=[1, -8.4, 0.2])
-    print('gauss parameters: ' + str(params))
+    #params, _ = curve_fit(gaussian, bin_centers, hist, p0=[1, -8.4, 0.2])
+    #print('gauss parameters: ' + str(params))
     x = np.linspace(min(triton_data), max(triton_data), 100)
-    fitted_curve = gaussian(x, *params)
-    plt.plot(x, fitted_curve, label='Fitted Gaussian', color = rgba_color)
+    #fitted_curve = gaussian(x, *params)
+    #plt.plot(x, fitted_curve, label='Fitted Gaussian', color = rgba_color)
 
     #-8.445221, 1, xerr=0.04114279080829548
-    plt.vlines(params[1] + 0.04114279080829548, 0, 15, color='black')
-    plt.vlines(params[1] - 0.04114279080829548, 0, 15, color='black')
+    plt.vlines(-8.48 + 0.04114279080829548, 0, 15, color='black', alpha=0.5)
+    plt.vlines(-8.48 - 0.04114279080829548, 0, 15, color='black', alpha=0.5)
     plt.ylim(0, max(hist)*1.1)
 
 #histogram_weights = weights*8
@@ -158,8 +158,17 @@ LEC('10010', 0)
 
 
 plt.tight_layout()
-plt.savefig('sensitivity_analysis_3s1_newest_3.pdf')
+#plt.savefig('./triton_distribution/triton_distr_0.6MeV.pdf')
+#plt.savefig('./triton_distribution/triton_distribution_5_weights_2_10_20_50_100.pdf')
 plt.show()
+
+indices = []
+for i in range(len(triton_data)):
+    if -8.88 < triton_data[i] < -8.8:
+        print(triton_data[i])
+        print(i)
+        indices.append(i)
+print(indices)
 '''
 weights_ = weights ** 0
 hist, bin_edges = np.histogram(weights, bins=14, weights=weights_)

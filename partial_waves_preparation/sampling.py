@@ -69,14 +69,15 @@ loc_samples = '/Users/pleazy/PycharmProjects/Proposal/phaseshifts_no_interp/LECs
 
 
 def sampling_one_partial_wave(number_samples, partial_wave, particles):
-    filename = "phaseshifts_SLLJT_%s_lambda_2.00_%s_s%s_filter.dat" % (partial_wave, particles, SVD_rank + 1)
+    #filename = "phaseshifts_SLLJT_%s_lambda_2.00_%s_s%s_filter.dat" % (partial_wave, particles, SVD_rank + 1)
+    filename = "phaseshifts_SLLJT_%s_lambda_2.00_s%s.dat" % (partial_wave, SVD_rank + 1)
     data_ = np.loadtxt(loc_samples + filename)
     LECs = data_[:, 0:5]
     phaseshifts = data_[:, 5:205]
     final_LECs = np.zeros((number_samples, SVD_rank + 1))
     final_phaseshifts = np.zeros((number_samples, grid_size))
 
-    random_numbers = random.sample(range(240), 240)
+    #random_numbers = random.sample(range(240), 240)
     #print(random_numbers)
 
     for i in range(number_samples):
@@ -121,7 +122,7 @@ def sampling_one_partial_wave(number_samples, partial_wave, particles):
 
     return
 
-sampling_one_partial_wave(240, '10010', 'np')
+sampling_one_partial_wave(1, '10010', 'np')
 
 
 

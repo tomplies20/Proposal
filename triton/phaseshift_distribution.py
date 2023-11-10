@@ -35,8 +35,13 @@ energy_ = np.array([7.46471504e-02, 6.71824354e-01, 1.86617876e+00, 3.65771037e+
 #energy = np.linspace(energy_[0], 200 + energy_[0], grid_size )
 grid_size = 200
 upper_energy_limit = 200
+
+up_lim = 2
+
 energy = np.linspace((energy_[0]/upper_energy_limit)**(1/3), 1, grid_size)**3 * upper_energy_limit
-energy_lin = np.linspace(energy[0], 200, 200)
+#energy_lin = np.linspace(energy[0], 200, 200)
+energy_lin_200 = np.linspace(energy[0], 200, 200)
+energy_lin = np.linspace(energy[0], up_lim, 200)
 errors = np.loadtxt(
     f'/Users/pleazy/PycharmProjects/Proposal/phaseshifts_no_interp/phaseshift_files/EKM_uncertainty/phaseshifts_uncertainties_SLLJT_{partial_wave}_lambda_2.00_s5.dat')
 
@@ -57,6 +62,11 @@ def gaussian(x,A, mu, sigma):
 
 LECs = data[:, 0:5]
 phaseshifts = data[:, 5:205]
+for i, phaseshift_ in enumerate(phaseshifts):
+    phaseshifts_interpolate = sc.interpolate.interp1d(energy_lin_200, phaseshift_)
+    phaseshifts_interpolated = phaseshifts_interpolate(energy_lin)
+    phaseshifts[i] = np.copy(phaseshifts_interpolated)
+    #phaseshift_ = phaseshifts_interpolated
 #print(np.shape(phaseshifts))
 
 #weights_ = np.ones((240))
@@ -177,15 +187,30 @@ for i in range(5):
 #plt.savefig('LEC_correlations_11111_68_percent.pdf')
 plt.show()
 '''
-
+rgba_color = (203 / 255, 139 / 255, 136 / 255, 255 / 255)
 weights_ = weights_/np.max(weights_)
 
-for i, phaseshifts_ in enumerate(phaseshifts[:240, :]):
-    plt.plot(energy_lin, phaseshifts_/reference_interpolated, color='grey', linewidth=0.5, alpha=weights_[i])
+
+indices = [13, 20, 24, 37, 66, 155, 201, 237, 253, 260, 264, 277, 306, 395, 441, 477]
+for i, phaseshifts_ in enumerate(phaseshifts[:, :]): #:240 prev
+    plt.plot(energy_lin, phaseshifts_ / reference_interpolated, color='grey', linewidth=0.5, alpha=weights_[i])
+    for j in indices:
+        if i ==j:
+            plt.plot(energy_lin, phaseshifts_ / reference_interpolated, color='r', linewidth=0.5)#, alpha=weights_[i])
+
 plt.fill_between(energy_lin, (reference_interpolated - error_interpolated)/reference_interpolated, (reference_interpolated + error_interpolated)/reference_interpolated, color='orange', alpha=0.4)
 plt.plot(energy_lin, (reference_interpolated - error_interpolated)/reference_interpolated, linestyle='dashed', color='orange', alpha = 0.6)
 plt.plot(energy_lin, (reference_interpolated + error_interpolated)/reference_interpolated, linestyle='dashed', color='orange', alpha = 0.6)
-plt.ylim(0.8, 1.2)
-plt.xlim(0, 200)
-plt.savefig('phaseshift_distribution_after_weights.pdf')
+plt.ylim(0.8, 1.1)
+plt.xlim(0, up_lim)
+#plt.savefig('phaseshift_distribution_after_weights_overbind_small_grid.pdf')
 plt.show()
+
+'''
+for i, phaseshifts_ in enumerate(phaseshifts[:, :]): #:240 prev
+    plt.plot(energy_lin, phaseshifts_ , color='grey', linewidth=0.5, alpha=weights_[i])
+    for j in indices:
+        if i ==j:
+            plt.plot(energy_lin, phaseshifts_ , color='r', linewidth=0.5, alpha=weights_[i])
+plt.show()
+'''

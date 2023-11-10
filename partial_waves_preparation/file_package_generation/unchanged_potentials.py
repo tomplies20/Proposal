@@ -2,6 +2,10 @@ import numpy as np
 from scipy.interpolate import interp2d
 import os
 
+
+
+output_path = '/Users/pleazy/Documents/Uni/Proposal/Files/package_1'
+
 def read_potential_from_file(path_to_file, number_of_mesh_points):
     # Weights and nodes for the quadrature
     weights = np.zeros(number_of_mesh_points)
@@ -65,7 +69,7 @@ f.close()
 '''
 
 #range eigentlich 65!!!!
-for x in range(240):
+for x in range(1):
     #for dir in os.listdir("/Users/pleazy/PycharmProjects/pythonProject/kai_files/data"):
     #    for filename in dir:
     #        print(dir)
@@ -116,8 +120,8 @@ for x in range(240):
                     new_filename = '_'.join(inds)
                     print(new_filename)
                     #new_filename = filename[0:9] + 'Plies' + str(x) + filename[17:]
-
-                    f = open('./packages/' + new_filename, 'w')
+                    file = os.path.join(output_path, new_filename)
+                    f = open(file, 'w')
                     for m in range(100):
                         f.write(str(_weights[m]) + " " + str(_nodes[m]) + "\n")
             

@@ -46,16 +46,27 @@ new_data_size = 480
 lin_size_max = 200
 all_weights = np.zeros((data_size, lin_size_max))
 
-lin_size = 3
+lin_size = 5
 l = 0.000001
-l=5
+l=4
 new_upper_limit = 200
 
 energy_lin_200 = np.linspace(energy[0], 200, 200)
 
-#energy_lin = np.array([ 10, 20, 50, 100, 175])
+#energy_lin = np.linspace(0.1, 6, 20)
+
 #energy_lin = np.array([2, 10, 20, 50, 100])
-energy_lin = np.array([energy_lin_200[1], energy_lin_200[10], energy_lin_200[20]])
+#energy_lin = np.array([2, 10, 20, 50, 100])
+#energy_lin = np.array([1, 10, 20, 50, 100])
+#energy_lin = np.array([0.8, 10, 35])
+energy_lin = np.array([0.1, 5, 10, 20, 50])
+energy_lin = np.array([0.6])
+
+lin_size = len(energy_lin)
+#energy_lin = np.array([energy_lin_200[1], energy_lin_200[10], energy_lin_200[20], energy_lin_200[50], energy_lin_200[100]])
+print('energy_lin')
+print(energy_lin)
+
 #energy_lin = np.linspace(energy[0], new_upper_limit, lin_size)
 # energy_lin = np.linspace(energy_[0], 200, 200)
 print(len(energy))
@@ -83,9 +94,9 @@ N3LO_error = errors[:, 3]
 error_interpolate = sc.interpolate.interp1d(energy_, N3LO_error)
 error_interpolated = error_interpolate(energy_lin)
 print(error_interpolated)
-print('yuck')
+#print('yuck')
 print(N3LO_error)
-plt.plot(energy_[0:20], N3LO_error[0:20])
+#plt.plot(energy_[0:20], N3LO_error[0:20])
 plt.plot(energy_lin, error_interpolated)
 reference_data = np.loadtxt(
     f'/Users/pleazy/PycharmProjects/Proposal/phaseshifts_no_interp/phaseshift_files/phaseshifts_SVD/phaseshifts_unchanged_SLLJT_{partial_wave}_lambda_2.00_s5.dat')
