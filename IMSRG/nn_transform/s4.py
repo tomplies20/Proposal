@@ -87,14 +87,14 @@ for dir in reversed(dirs):
                     last_line_data_array = np.array(last_line_data_list)
                     if index == 0:
                         loader = np.empty((len(data_array),len(data_array[0]), 2))
-                        loader[:, :, 0] = data_array
+                        loader[:, :, 0] = np.copy(data_array)
                         last_line_loader = np.empty((len(last_line_data_array), len(last_line_data_array[0]), 2))
-                        last_line_loader[:, :, 0] = last_line_data_array
+                        last_line_loader[:, :, 0] = np.copy(last_line_data_array)
                     if index!= 0:
                         #loader = np.stack((loader, data_array), axis=2)
                         #last_line_loader = np.stack((last_line_loader, last_line_data_array), axis=2)
-                        loader[:, :, index] = data_array
-                        last_line_loader[:, :, index] = last_line_data_array
+                        loader[:, :, index] = np.copy(data_array)
+                        last_line_loader[:, :, index] = np.copy(last_line_data_array)
                     print(index)
                     print(np.shape(loader))
                     print(np.shape(last_line_loader))
